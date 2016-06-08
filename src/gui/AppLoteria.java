@@ -37,9 +37,12 @@ public class AppLoteria extends javax.swing.JFrame {
             initComponents();
             d = new Data();
             System.out.println("Conexion exitosa");
+
             setLocationRelativeTo(this);
             setResizable(false);
-            juego=new ArrayList();
+
+            juego = new ArrayList();
+
             iniciar();
             iniciarConsultaSorteo();
             iniciarConsultaJuego();
@@ -879,7 +882,7 @@ public class AppLoteria extends javax.swing.JFrame {
                 txtRutAdmin.setText(null);
                 JOptionPane.showMessageDialog(this, "Sorteo realizado con exito!");
                 iniciar();
-            }else if(!rutAdmin.equalsIgnoreCase(sorteo.getRut_admin())){
+            } else if (!rutAdmin.equalsIgnoreCase(sorteo.getRut_admin())) {
                 JOptionPane.showMessageDialog(this, "Rut administrador invalido. Pruebe nuevamente");
                 txtRutAdmin.setText(null);
                 txtRutAdmin.requestFocus();
@@ -899,7 +902,7 @@ public class AppLoteria extends javax.swing.JFrame {
 //
 //      
 //    }
-    
+
     private void btnConsultarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarJuegoActionPerformed
         //Sorteo sorteo; //null
         int idJuego = 0;
@@ -909,8 +912,8 @@ public class AppLoteria extends javax.swing.JFrame {
             if (d.getBoleto(idJuego) instanceof Boleto) {
                 Boleto boleto = d.getBoleto(idJuego);
                 int idSorteo = boleto.getId_sorteo();
-                Sorteo sorteo =d.getSorteo(idSorteo);
-                
+                Sorteo sorteo = d.getSorteo(idSorteo);
+
                 if (sorteo.getId() != d.getIDUltimoSorteo()) {
                     lblRevisarIDSorteo.setText(Integer.toString(boleto.getId_sorteo()));
 
@@ -985,11 +988,11 @@ public class AppLoteria extends javax.swing.JFrame {
                     } else {
                         lblRevisarMensaje.setText("N/A");
                     }
-                } else if(sorteo.getId() == d.getIDUltimoSorteo()){
+                } else if (sorteo.getId() == d.getIDUltimoSorteo()) {
                     JOptionPane.showMessageDialog(this, "Sorteo aun no se ha sorteado");
                     txtRevisarIdJuego.setText(null);
                     txtRevisarIdJuego.requestFocus();
-                }else{
+                } else {
                     juegoinvalido();
                 }
             }
@@ -1021,30 +1024,30 @@ public class AppLoteria extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             System.out.println("Error cargar estadistica" + ex.getMessage());
-        } catch(NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "ID Sorteo invalido");
             iniciarConsultaSorteo();
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void txtRevisarIdJuegoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRevisarIdJuegoKeyReleased
-        String idJuego=txtRevisarIdJuego.getText();
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER && !idJuego.equalsIgnoreCase("")){
+        String idJuego = txtRevisarIdJuego.getText();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER && !idJuego.equalsIgnoreCase("")) {
             btnConsultarJuego.doClick();
         }
-        
-        if(idJuego.length()==0){
+
+        if (idJuego.length() == 0) {
             iniciarConsultaJuego();
         }
     }//GEN-LAST:event_txtRevisarIdJuegoKeyReleased
 
     private void txtConsultarSorteoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtConsultarSorteoKeyReleased
-        String idSorteo=txtConsultarSorteo.getText();
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER && !idSorteo.equalsIgnoreCase("")){
+        String idSorteo = txtConsultarSorteo.getText();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER && !idSorteo.equalsIgnoreCase("")) {
             btnConsultar.doClick();
         }
-        
-        if(idSorteo.length()==0){
+
+        if (idSorteo.length() == 0) {
             iniciarConsultaSorteo();
         }
     }//GEN-LAST:event_txtConsultarSorteoKeyReleased
@@ -1054,9 +1057,9 @@ public class AppLoteria extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPane1KeyReleased
 
     private void txtRutAdminKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRutAdminKeyReleased
-        String idRut=txtRutAdmin.getText();
-        
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER && !idRut.equalsIgnoreCase("")){
+        String idRut = txtRutAdmin.getText();
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER && !idRut.equalsIgnoreCase("")) {
             btnSortear.doClick();
         }
     }//GEN-LAST:event_txtRutAdminKeyReleased
@@ -1073,7 +1076,6 @@ public class AppLoteria extends javax.swing.JFrame {
         try {
             Sorteo sorteo = d.getSorteo(d.getIDUltimoSorteo());
 //            String juegos = getJuego(juego);
-            
 
             d.registrarBoleto(juego);
             d.actualizarPozo(sorteo.getPozo() + 2000, sorteo.getId());
@@ -1105,24 +1107,46 @@ public class AppLoteria extends javax.swing.JFrame {
     }//GEN-LAST:event_txtJuegoComponentAdded
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String numero =txtJugada.getText();
-        if(juego.contains(numero)){
-            JOptionPane.showMessageDialog(this, "Numero ya ingresado. Pruebe nuevamente");
-            txtJugada.setText(null);
-            txtJugada.requestFocus();
-        }else if(!juego.contains(numero)){
-            juego.add(numero);
-            setJugada(lbl1,lbl2,lbl3,lbl4);
+        try {
+            String numero = txtJugada.getText();
+
+            int num = Integer.parseInt(numero);
+            if (num < 10) {
+                numero = "0" + num;
+            }
+
+            if (num > 30) {
+                JOptionPane.showMessageDialog(this, "Ingrese numero menor a 30");
+                txtJugada.setText(null);
+                txtJugada.requestFocus();
+            } else if (juego.contains(numero)) {
+                JOptionPane.showMessageDialog(this, "Numero ya ha sido ingresado. Prueba nuevamente");
+                txtJugada.setText(null);
+                txtJugada.requestFocus();
+            } else {
+                juego.add(numero);
+                
+//              setJugada(lbl1, lbl2, lbl3, lbl4);
+                //mostrar numeros ingresados
+                
+                
+                int largo = juego.size();
+                int maximo = Data.cantidadNumeros;
+
+                if (largo == 4) {
+                    btnJugar.setEnabled(true);
+                    btnAgregar.setEnabled(false);
+                }else{
+                    txtJugada.requestFocus();
+                }
+                
+                txtJugada.setText(null);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese solo numeros!");
             txtJugada.setText(null);
             txtJugada.requestFocus();
         }
-        
-        int largo = juego.size();                
-        if (largo == 4) {
-            btnJugar.setEnabled(true);
-        }else if(largo!=4){
-            btnJugar.setEnabled(false);
-        }         
     }//GEN-LAST:event_btnAgregarActionPerformed
 
 //    private void validarJugada() {
@@ -1134,7 +1158,6 @@ public class AppLoteria extends javax.swing.JFrame {
 //            btnJugar.setEnabled(false);
 //        }
 //    }
-
     /**
      * @param args the command line arguments
      */
@@ -1300,13 +1323,12 @@ public class AppLoteria extends javax.swing.JFrame {
 //    private void habilitarJugada() {
 //        btn1.setEnabled(true);
 //    }
-
     private void limpiar() {
         txtJugada.setText(null);
-        juego.clear();        
-        limpiarJugada(lbl1,lbl2,lbl3,lbl4);
+        juego.clear();
+        limpiarJugada(lbl1, lbl2, lbl3, lbl4);
         btnJugar.setEnabled(false);
-        
+
 //        txtJuego.setText(null);
 //        btn1.setEnabled(true);
 //        btn2.setEnabled(true);
@@ -1360,14 +1382,13 @@ public class AppLoteria extends javax.swing.JFrame {
 //            System.out.println("Error cargar estadistica " + ex.getMessage());
 //        }
 //    }
-
     private void juegoinvalido() {
 //        lblRevisarAciertos.setText("N/A");
         lblRevisarNumeroSorteo1.setText("N/A");
         lblRevisarNumeroSorteo2.setText("N/A");
         lblRevisarNumeroSorteo3.setText("N/A");
-        lblRevisarNumeroSorteo4.setText("N/A");        
-        
+        lblRevisarNumeroSorteo4.setText("N/A");
+
         lblRevisarIDSorteo.setText("N/A");
         lblRevisarMensaje.setText("N/A");
         lblRevisarPremio.setText("N/A");
@@ -1430,7 +1451,7 @@ public class AppLoteria extends javax.swing.JFrame {
                 } else {
                     lblConsultarPremio4Aciertos.setText("$ " + 0 + " c/u");
                 }
-            }else if(sorteo.getId() == d.getIDUltimoSorteo()){
+            } else if (sorteo.getId() == d.getIDUltimoSorteo()) {
                 JOptionPane.showMessageDialog(this, "El juego aún no se ha sorteado");
                 txtConsultarSorteo.requestFocus();
                 iniciarConsultaSorteo();
@@ -1462,7 +1483,7 @@ public class AppLoteria extends javax.swing.JFrame {
     }
 
     private void iniciarConsultaJuego() {
-        
+
         txtRevisarIdJuego.setText(null);
         txtRevisarIdJuego.requestFocus();
 //        lblRevisarAciertos.setText(null);
@@ -1470,7 +1491,7 @@ public class AppLoteria extends javax.swing.JFrame {
         lblRevisarNumeroSorteo2.setText(null);
         lblRevisarNumeroSorteo3.setText(null);
         lblRevisarNumeroSorteo4.setText(null);
-        
+
         lblRevisarIDSorteo.setText(null);
         lblRevisarMensaje.setText(null);
         lblRevisarNumero1.setText(null);
@@ -1485,42 +1506,42 @@ public class AppLoteria extends javax.swing.JFrame {
     }
 
     private boolean getMatch(String numero, String numerosSorteo) {
-        boolean match=false;
-        
-        int[] arreglo=new int[4];
-        for(int i =0; i<4; i++){
-            char c=numerosSorteo.charAt(i);
-            String s=String.valueOf(c);
-            int n=Integer.parseInt(s);
-            arreglo[i]=n;            
+        boolean match = false;
+
+        int[] arreglo = new int[4];
+        for (int i = 0; i < 4; i++) {
+            char c = numerosSorteo.charAt(i);
+            String s = String.valueOf(c);
+            int n = Integer.parseInt(s);
+            arreglo[i] = n;
         }
-        
-        for(int n:arreglo){
-            String sn=Integer.toString(n);
-            if(sn.equalsIgnoreCase(numero)){
-                match=true;                
+
+        for (int n : arreglo) {
+            String sn = Integer.toString(n);
+            if (sn.equalsIgnoreCase(numero)) {
+                match = true;
             }
         }
-        
+
         return match;
     }
 
-    private void setJugada(JLabel... lbls) {
-        int indice=juego.size()-1;
-        Object obnumero=juego.get(indice);
-        String strnumero=obnumero.toString();
-        int numero=Integer.parseInt(strnumero);
-        for(JLabel l: lbls){
-            String texto=l.getText();
-            if(texto.equalsIgnoreCase("")){
-                l.setText(Integer.toString(numero));
-                break;
-            }
-        }
-    }
+//    private void setJugada(JLabel... lbls) {
+//        int indice = juego.size() - 1;
+//        Object obnumero = juego.get(indice);
+//        String strnumero = obnumero.toString();
+//        int numero = Integer.parseInt(strnumero);
+//        for (JLabel l : lbls) {
+//            String texto = l.getText();
+//            if (texto.equalsIgnoreCase("")) {
+//                l.setText(Integer.toString(numero));
+//                break;
+//            }
+//        }
+//    }
 
     private void limpiarJugada(JLabel... lbls) {
-        for(JLabel l: lbls){
+        for (JLabel l : lbls) {
             l.setText("");
         }
     }
@@ -1537,5 +1558,4 @@ public class AppLoteria extends javax.swing.JFrame {
 //       
 //        return jugada;
 //    }
-
 }

@@ -21,6 +21,9 @@ public class Data {
     private String query;
     private ResultSet rs;
     private ResultSet rs2;
+    public static int cantidadNumeros;
+    public static int ultimoSorteo;
+    
     
     public Data() throws SQLException {        
         c = new Conexion(
@@ -28,7 +31,17 @@ public class Data {
                 "db_loteria",
                 "root",
                 "123456"
-        );
+        );        
+        cantidadNumeros=4;
+        ultimoSorteo=getIDUltimoSorteo();        
+    }
+
+    public static int getCantidadNumeros() {
+        return cantidadNumeros;
+    }
+
+    public static void setCantidadNumeros(int cantidadNumeros) {
+        Data.cantidadNumeros = cantidadNumeros;
     }
     
     public int getIDUltimoSorteo() throws SQLException{

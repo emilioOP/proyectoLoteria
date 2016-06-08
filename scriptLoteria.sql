@@ -1,10 +1,12 @@
 create database db_loteria;
 use db_loteria;
 
+--drop database db_loteria;
+
 create table tbl_sorteo(
     id int auto_increment,
     pozo int,
-    numeros_sorteo varchar(4),
+    numeros_sorteo varchar(60),
     rut_admin varchar(5),
     total_ganadores int,
     abierto bit,
@@ -14,7 +16,7 @@ create table tbl_sorteo(
 create table tbl_boleto(
     id int auto_increment,
     id_sorteo int,
-    numeros_boleto varchar(max),
+    numeros_boleto varchar(60),
     aciertos int,
     premio int,
     primary key(id),
