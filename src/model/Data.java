@@ -85,13 +85,20 @@ public class Data {
         juego.sort(null);
           
         StringBuffer numeros=new StringBuffer();
+//        String n;
+//        for(Object o: juego.toArray()){
+//            n=String.valueOf(o); //si es 01, n="1"
+//            numeros.append(n);
+//        }
+        
+//        String jugada=numeros.toString();
         String n;
-        for(Object o: juego.toArray()){
-            n=String.valueOf(o);
+        for(Object j: juego){
+            n=j.toString();
             numeros.append(n);
         }
         
-        String jugada=numeros.toString();
+        String jugada=numeros.toString();        
         
         int id_sorteo=getIDUltimoSorteo();
         query="insert into tbl_boleto values(null, "+id_sorteo+", "+jugada+", 0, 0);";
