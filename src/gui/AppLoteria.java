@@ -1153,7 +1153,7 @@ public class AppLoteria extends javax.swing.JFrame {
                 setJugada(lbl1, lbl2, lbl3, lbl4, lbl5, lbl6, lbl8, lbl9, lbl10);               
                 
                 int largo = juego.size();
-                int maximo = Data.cantidadNumeros;
+                int maximo = d.cantidadNumeros;
 
                 if (largo == 4) {
                     btnJugar.setEnabled(true);

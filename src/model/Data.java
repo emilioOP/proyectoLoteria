@@ -21,8 +21,9 @@ public class Data {
     private String query;
     private ResultSet rs;
     private ResultSet rs2;
-    public static int cantidadNumeros;
+    public int cantidadNumeros;
     public static int ultimoSorteo;
+    private ArrayList<Integer> numeros;
     
     
     public Data() throws SQLException {        
@@ -33,15 +34,16 @@ public class Data {
                 "123456"
         );        
         cantidadNumeros=4;
-        ultimoSorteo=getIDUltimoSorteo();        
+        ultimoSorteo=getIDUltimoSorteo();
+        numeros= new ArrayList<Integer>();
     }
 
-    public static int getCantidadNumeros() {
+    public int getCantidadNumeros() {
         return cantidadNumeros;
     }
 
-    public static void setCantidadNumeros(int cantidadNumeros) {
-        Data.cantidadNumeros = cantidadNumeros;
+    public  void setCantidadNumeros(int cantidadNumeros) {
+        this.cantidadNumeros = cantidadNumeros;
     }
     
     public int getIDUltimoSorteo() throws SQLException{
@@ -137,13 +139,21 @@ public class Data {
             nSorteo = rs.getString(3);
             
             int aciertos=0;
-            for (int i = 0; i < nBoleto.length(); i++) {
-                char l = nBoleto.charAt(i);
-                String ll = String.valueOf(l);
-                if (nSorteo.contains(ll)) {
-                    aciertos++;
-                }
-            }
+            //convertir nSorteo a arraylist
+            numeros.clear();
+
+            
+            
+            
+            
+            
+//            for (int i = 0; i < nBoleto.length(); i++) {
+//                char l = nBoleto.charAt(i);
+//                String ll = String.valueOf(l);
+//                if (nSorteo.contains(ll)) {
+//                    aciertos++;
+//                }
+//            }
             
             String query2 = "update tbl_boleto set aciertos=" + aciertos + " where id=" + idBoleto + "";
             c.ejecutar(query2);                       
@@ -262,23 +272,33 @@ public class Data {
     }
     
     public void sortear(int idSorteo) throws SQLException{
+        numeros.clear();
         Random rd=new Random();
-        int[] numeros=new int[4];
-        int i=0;
+        int limite=cantidadNumeros*3;
         
-        int n=0;        
-        while(i<4){
-            n=rd.nextInt(9);
-            if(n!=0 & n!=numeros[0] & n!=numeros[1] & n!=numeros[2] & n!=numeros[3]){
-                numeros[i]=n;                                
-                i++;                
-            }            
+        int n=0;
+        for (int i = 0; i < cantidadNumeros; i++) {
+            while (n == 0 || numeros.contains(n)) {
+                n = rd.nextInt(limite);
+            }
+            numeros.add(n);
         }
         
-        Arrays.sort(numeros);
-        String ordenado=numeros[0]+""+numeros[1]+""+numeros[2]+""+numeros[3];
+        numeros.sort(null);
         
-        query="update tbl_sorteo set numeros_sorteo="+ordenado+" where id="+idSorteo+"";
+        StringBuffer juego= new StringBuffer();
+        String num;
+        for(int i=0; i<numeros.size(); i++){
+            n=numeros.get(i); 
+            num=Integer.toString(n);
+            if(n<10){
+                num="0"+n;
+            }
+            juego.append(num);
+        } 
+        numeros.clear();
+        
+        query="update tbl_sorteo set numeros_sorteo="+juego.toString()+" where id="+idSorteo+"";
         c.ejecutar(query);
     }
     

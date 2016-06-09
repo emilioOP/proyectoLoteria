@@ -5,7 +5,9 @@
  */
 package model;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import java.awt.List;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,13 +25,8 @@ public class prueba {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-            ArrayList juego= new ArrayList();
-            juego.add(1);
-            juego.add(3);
-            juego.add(4);
-            juego.add(6);
-            
-            System.out.println(getJuego(juego));
+        String nBoleto=generarNumeros(5);
+        System.out.println(nBoleto);
     }
     
     private static int comparar() {
@@ -140,28 +137,49 @@ public class prueba {
         return ordenado;
     }
     
-    public static void generarNumeros(int cantidad){
+    public static String generarNumeros(int cantidad){
         Random rd = new Random();
-        ArrayList<Integer> numeros;
-        numeros = new ArrayList<>();
+        ArrayList<Integer> numeros = new ArrayList<>();
+        int cantidadNumeros=cantidad;
+        int limite=cantidadNumeros*3;
+        
         int n=0;
-        int i=0;
-        while(i<cantidad){
-            n=rd.nextInt(25);
-            if(n!=0 & !numeros.contains(n)){
-                numeros.add(n);
-                i++;
+        for (int i = 0; i < cantidadNumeros; i++) {
+            while (n == 0 || numeros.contains(n)) {
+                n = rd.nextInt(limite);
             }
+            numeros.add(n);
         }
         
         numeros.sort(null);
-
         
-//        
-        System.out.print("|");
-        for(int b:numeros){
-            System.out.print(b+"|");
+        StringBuffer juego= new StringBuffer();
+        String num;
+        for(int i=0; i<numeros.size(); i++){
+            n=numeros.get(i); 
+            num=Integer.toString(n);
+            if(n<10){
+                num="0"+n;
+            }
+            juego.append(num);
         }
+        
+        String nBoleto=juego.toString();
+        
+        return nBoleto;
+        
+//        int i=0;
+//        while(i<cantidad){
+//            n=rd.nextInt(25);
+//            if(n!=0 & !numeros.contains(n)){
+//                numeros.add(n);
+//                i++;
+//            }
+//        }       
+//        System.out.print("|");
+//        for(int b:numeros){
+//            System.out.print(b+"|");
+//        }
 //        String ordenado = numeros[0] + "" + numeros[1] + "" + numeros[2] + "" + numeros[3];
     }
     
@@ -176,5 +194,18 @@ public class prueba {
         String jugada=numeros.toString();
        
         return jugada;
-    }    
+    }
+
+    private static ArrayList<Integer> getLista(String juego){
+        String nBoleto=juego;
+        ArrayList numeros=new ArrayList();
+        
+        for (int i = 0; i < nBoleto.length() - 1; i++) {
+            String numero = nBoleto.substring(i, i + 1);
+            System.out.println(numero);
+            numeros.add(Integer.parseInt(numero));
+        }
+        
+        return numeros;
+    }
 }

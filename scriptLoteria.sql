@@ -60,6 +60,11 @@ drop database db_loteria;
 
 select tbl_boleto.id as 'id_boleto' , tbl_boleto.id_sorteo, tbl_boleto.aciertos from tbl_boleto where tbl_boleto.id_sorteo=3;
 
+select 
+tbl_boleto.id as 'id_boleto', 
+tbl_boleto.numeros_boleto, 
+tbl_sorteo.numeros_sorteo as 'numeros sorteo' 
+from tbl_boleto inner join tbl_sorteo on tbl_boleto.id_sorteo= tbl_sorteo.id where tbl_Sorteo.id=1
 
 select tbl_boleto.id as 'id_boleto', tbl_boleto.aciertos, tbl_sorteo.pozo from tbl_boleto inner join tbl_sorteo on tbl_boleto.id_sorteo=tbl_sorteo.id;
 
